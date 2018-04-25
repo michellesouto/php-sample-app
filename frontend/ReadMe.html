@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NAC20</title>
+</head>
+<body bgcolor="#c5e2ff" topmargin=20px leftmargin=50px>
+    <p><font size="5px">Documentaçao SecDevOps</font></p>
+    <p> <font color="#9da1a6" size="3px">Michelle Moreira Souto  RM:78683</font></p>
+
+    <p><b><font color="#787a7c">- Instalar o docker na máquina:</font></b></p>
+        
+        <a href="https://docs.docker.com/docker-for-windows/install/"><img  width="50px" height="50px" float="left" src="img/docker-logo.png"/></a>
+    
+
+
+    <p><b><font color="#787a7c">- Inicie o Docker e dê um fork para sua conta neste</font> <a href="https://github.com/fiapsecdevops/php-sample-app/">repositório do github</a></b></p>
+
+    
+
+    <p><b><font color="#787a7c">- Para receber uma cópia de quase todos os dados, utilize a URL do seu repositório e execute o seguinte comando no terminal:</font></b></p>
+
+    <p><font color="#9da1a6">     git clone “URL do seu repositório”</font></p>
+
+
+    <p><b><font color="#787a7c">- Isso fará com que crie uma pasta chamada php-sample-app/ . Dentro desta pasta deverá ter outra chamada backend, onde será criado o arquivo Dockerfile.</b></p>
+
+
+
+    <p><b><font color="#787a7c">- Para adicionar uma imagem do mysql na versão 5.7 no seu docker, adicione os seguintes comandos dentro do arquivo Dockerfile:</font></b></p>
+
+    <p><font color="#9da1a6">FROM mysql:5.7</font></p>
+    
+    <p><font color="#9da1a6">COPY ./demo.sql /docker-entrypoint-initdb.d</font></p>    
+ 
+
+<p><b><font color="#787a7c">- Crie também outro arquivo chamado Dockerfile, na pasta frontend, dentro do diretório php-sample-app</font></b></p>
+
+    <p><b><font color="#787a7c">- Para baixar uma imagem com o apache configurado para rodar php com mysql, adicione os seguintes comandos dentro do arquivo Dockerfile:</font></b></p>
+
+    <p><font color="#9da1a6">FROM php:7.2-apache</font></p>
+        <p><font color="#9da1a6"># Enable mysqli to connect to database<br>
+            RUN docker-php-ext-install mysqli</font></p>
+    <p><font color="#9da1a6">WORKDIR /var/www/html/</font></p>
+    <p><font color="#9da1a6">COPY . /var/www/html/</font></p>
+    
+
+<p><b><font color="#787a7c">- Para adicionar a imagem do mysql e criar um container chamado db na versão 0.0.1, dentro da pasta backend, execute o seguinte comando:</font></b></p>
+        
+    <p><font color="#9da1a6">docker build . -t db:0.0.1</font></p>
+
+
+    <p><b><font color="#787a7c">- Para criar um container chamado backend utilizando a imagem db:0.0.1 e iniciar o banco, execute o seguinte comando:</font></b></p>
+
+    <p><font color="#9da1a6">docker run -d -e MYSQL_DATABASE='demo' -e MYSQL_ALLOW_EMPTY_PASSWORD='yes' --name backend db:0.0.1</font></p>
+
+
+
+    <p><b><font color="#787a7c">- Testando a conexão com o banco, execute o comando:</font></b></p> 
+    
+    <p><font color="#9da1a6">docker exec -ti backend mysql -u root -p</font></p>
+    
+
+    <p><b><font color="#787a7c">- Para que o docker leia a dockerfile localizada na pasta frontend e crie a imagem frontend:0.0.1, execute(na pasta frontend) o comando:</font></b></p>
+
+    <p><font color="#9da1a6">docker build . -t frontend:0.0.1</font></p>
+
+
+    <p><b><font color="#787a7c">- Execute o comando a seguir e uma imagem chamada frontend será criada e estará a disposição na porta 80 interna e externa.</font></b></p>
+    
+    <p><font color="#9da1a6">docker run -d --rm --name frontend -p 80:80 --link backend frontend:0.0.1</font></p>
+
+    <p><b><font color="#787a7c">- Por fim, para entrar na aplicaçao, acesse a URL </font><a href="http://localhost/">http://localhost/</a>
+
+</body>
+</html>
+
+   
